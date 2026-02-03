@@ -1,0 +1,18 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+.env/
+.env
+*.env
+
+*.sqlite3
+*.db
+
+static/wordcloud.png
+.DS_Store
+*.log
+
+# Ignore all CSV datasets
+data/*.csv

@@ -1,0 +1,6 @@
+flask
+beautifulsoup4
+requests
+vaderSentiment
+wordcloud
+matplotlib

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IPO Archive</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container mt-4">
+    <h2 class="mb-4">IPO Archive (From Dataset)</h2>
+    {% if ipo_names %}
+    <div class="list-group">
+        {% for name in ipo_names %}
+        <a href="{{ url_for('ipo_detail', ipo_name=name|urlencode) }}"
+           class="list-group-item list-group-item-action">{{ name }} IPO</a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-warning">No IPOs found in dataset.</div>
+    {% endif %}
+</div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ ipo_name }} Chatbot</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container mt-4">
+    <h2 class="mb-4">Chatbot – Ask about {{ ipo_name }} IPO</h2>
+
+    <form method="POST" class="input-group mb-4">
+        <input type="text" name="query" class="form-control" placeholder="E.g. What is the issue price?" required>
+        <button class="btn btn-primary" type="submit">Ask</button>
+    </form>
+
+    {% if chatbot_answer %}
+    <div class="alert {{ 'alert-info' if 'Sorry' not in chatbot_answer else 'alert-warning' }}">
+        <strong>Answer:</strong> {{ chatbot_answer }}
+    </div>
+    {% endif %}
+
+    <div class="mt-4">
+        <a href="{{ url_for('ipo_detail', ipo_name=ipo_name|urlencode) }}" class="btn btn-secondary me-2">← Back to Overview</a>
+        <a href="{{ url_for('ipo_articles', ipo_name=ipo_name|urlencode) }}" class="btn btn-info">📄 View Articles</a>
+    </div>
+</div>
+</body>
+</html>

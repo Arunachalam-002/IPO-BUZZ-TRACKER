@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ ipo_name }} Articles</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container mt-4">
+    <h2 class="mb-4">{{ ipo_name }} – Related News Articles</h2>
+
+    {% if articles %}
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% for article in articles %}
+        <div class="col">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title text-primary">Sentiment:
+                        {% if article['Sentiment'] == 'positive' %}
+                            <span class="badge bg-success">Positive</span>
+                        {% elif article['Sentiment'] == 'neutral' %}
+                            <span class="badge bg-secondary">Neutral</span>
+                        {% else %}
+                            <span class="badge bg-danger">Negative</span>
+                        {% endif %}
+                    </h6>
+                    <p class="card-text">{{ article['Summary'] }}</p>
+                    <a href="{{ article['URL'] }}" class="btn btn-sm btn-outline-primary" target="_blank">🔗 Read Full Article</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-warning">No articles found for this IPO.</div>
+    {% endif %}
+
+    <div class="mt-4">
+        <a href="{{ url_for('ipo_detail', ipo_name=ipo_name|urlencode) }}" class="btn btn-secondary me-2">← Back to Overview</a>
+        <a href="{{ url_for('ipo_chatbot', ipo_name=ipo_name|urlencode) }}" class="btn btn-success">💬 Ask Chatbot</a>
+    </div>
+</div>
+</body>
+</html>
