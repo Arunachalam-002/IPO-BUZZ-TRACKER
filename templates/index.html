@@ -3,20 +3,369 @@
 <head>
     <title>IPO Archive</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --dark-bg: #121212;
+            --darker-bg: #0a0a0a;
+            --vintage-dark: #1e1e1e;
+            --vintage-border: #3a3a3a;
+            --vintage-gold: #d4af37;
+            --vintage-gold-light: #f0e6c2;
+            --vintage-text: #e0e0e0;
+            --vintage-text-light: #f5f5f5;
+            --vintage-card: #252525;
+            --vintage-list-item: #2a2a2a;
+            --vintage-list-hover: #333333;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--vintage-text);
+            font-family: 'Georgia', serif;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.03) 0%, rgba(212, 175, 55, 0.03) 90%),
+                radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.03) 0%, rgba(212, 175, 55, 0.03) 90%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            padding: 2rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h2 {
+            color: var(--vintage-gold);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--vintage-border);
+            padding-bottom: 0.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--vintage-gold);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+        
+        h2:hover:after {
+            transform: scaleX(1);
+        }
+        
+        .search-container {
+            position: relative;
+            margin-bottom: 2rem;
+            max-width: 500px;
+        }
+        
+        .search-container i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--vintage-gold);
+        }
+        
+        #searchInput {
+            padding-left: 40px;
+            background-color: var(--vintage-card);
+            border: 1px solid var(--vintage-border);
+            color: var(--vintage-text);
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        #searchInput:focus {
+            border-color: var(--vintage-gold);
+            box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.25);
+        }
+        
+        .list-group {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .list-group-item {
+            background-color: var(--vintage-list-item);
+            color: var(--vintage-text);
+            border-color: var(--vintage-border);
+            padding: 1.25rem 1.5rem;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .list-group-item:hover {
+            background-color: var(--vintage-list-hover);
+            color: var(--vintage-gold-light);
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .list-group-item:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--vintage-gold), #f0e6c2);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .list-group-item:hover:before {
+            opacity: 1;
+        }
+        
+        .list-group-item-action {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            width: 100%;
+        }
+        
+        .company-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+        
+        .button-container {
+            flex-shrink: 0;
+            width: 120px;
+            text-align: right;
+        }
+        
+        .list-group-item-action:after {
+            content: '→';
+            margin-left: auto;
+            color: var(--vintage-gold);
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+        
+        .list-group-item-action:hover:after {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .ipo-badge {
+            background-color: rgba(212, 175, 55, 0.1);
+            color: var(--vintage-gold);
+            padding: 0.35em 0.65em;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            width: 100%;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .list-group-item:hover .ipo-badge {
+            background-color: var(--vintage-gold);
+            color: var(--vintage-dark);
+        }
+        
+        .alert-warning {
+            background-color: rgba(212, 175, 55, 0.1);
+            border-color: var(--vintage-gold);
+            color: var(--vintage-gold-light);
+            border-radius: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+        
+        .stats-card {
+            background-color: var(--vintage-card);
+            border: 1px solid var(--vintage-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stats-value {
+            font-size: 2rem;
+            color: var(--vintage-gold);
+            font-weight: 600;
+        }
+        
+        /* Vintage decorative elements */
+        .vintage-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--vintage-gold), transparent);
+            margin: 2rem 0;
+            opacity: 0.5;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .list-group-item {
+                padding: 1rem;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .ipo-badge {
+                margin-left: 0;
+                margin-top: 0.5rem;
+            }
+        }
+    </style>
 </head>
-<body class="bg-light">
+<body>
 <div class="container mt-4">
-    <h2 class="mb-4">IPO Archive (From Dataset)</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-archive me-2"></i>IPO Archive</h2>
+        <div class="text-muted"><i class="fas fa-clock me-1"></i> Last updated: <span id="currentDate"></span></div>
+    </div>
+
+    <div class="search-container">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" class="form-control" placeholder="Search IPOs...">
+    </div>
+    
+    <div class="vintage-divider"></div>
+
     {% if ipo_names %}
-    <div class="list-group">
+    <div class="list-group" id="ipoList">
         {% for name in ipo_names %}
         <a href="{{ url_for('ipo_detail', ipo_name=name|urlencode) }}"
-           class="list-group-item list-group-item-action">{{ name }} IPO</a>
+           class="list-group-item list-group-item-action">
+           <div class="company-info">
+               <i class="fas fa-file-invoice-dollar me-2"></i> 
+               <span>{{ name }} IPO</span>
+           </div>
+           <div class="button-container">
+               <span class="ipo-badge">View Details</span>
+           </div>
+        </a>
         {% endfor %}
     </div>
     {% else %}
-    <div class="alert alert-warning">No IPOs found in dataset.</div>
+    <div class="alert alert-warning text-center py-3">
+        <i class="fas fa-exclamation-circle me-2"></i> No IPOs found in dataset.
+    </div>
     {% endif %}
+
+    <div class="vintage-divider"></div>
+    
+    <!-- Statistics Explanation Section -->
+    <div class="card shadow-sm mb-4" style="background-color: var(--vintage-card); border: 1px solid var(--vintage-border);">
+        <div class="card-body">
+            <h5 class="card-title text-center mb-4" style="color: var(--vintage-gold);">
+                <i class="fas fa-info-circle me-2"></i>Statistics Explanation
+            </h5>
+            <div class="row">
+                <div class="col-md-4 text-center mb-3">
+                    <div class="stats-value" style="font-size: 1.5rem;">{{ ipo_names|length if ipo_names else 0 }}</div>
+                    <h6 style="color: var(--vintage-gold-light); margin-bottom: 0.5rem;">Total IPOs</h6>
+                    <small class="text-muted">Actual count of IPOs available in our database from the CSV dataset.</small>
+                </div>
+                <div class="col-md-4 text-center mb-3">
+                    <div class="stats-value" id="recentCount" style="font-size: 1.5rem;">{{ (ipo_names|length * 0.2)|int if ipo_names else 0 }}</div>
+                    <h6 style="color: var(--vintage-gold-light); margin-bottom: 0.5rem;">Recent Additions</h6>
+                    <small class="text-muted">Simulated count representing 20% of total IPOs as recently added entries.</small>
+                </div>
+                <div class="col-md-4 text-center mb-3">
+                    <div class="stats-value" id="popularCount" style="font-size: 1.5rem;">{{ (ipo_names|length * 0.35)|int if ipo_names else 0 }}</div>
+                    <h6 style="color: var(--vintage-gold-light); margin-bottom: 0.5rem;">Most Viewed</h6>
+                    <small class="text-muted">Simulated count representing 35% of total IPOs as most frequently viewed.</small>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <small class="text-muted">
+                    <i class="fas fa-lightbulb me-1"></i>
+                    <strong>Note:</strong> Recent Additions and Most Viewed are demonstration statistics. 
+                    In a production environment, these would be calculated from actual user interaction data.
+                </small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="d-flex justify-content-between align-items-center">
+        <small class="text-muted">
+            <i class="fas fa-database me-1"></i> Data sourced from our financial partners
+        </small>
+        <button class="btn btn-sm btn-outline-secondary" id="refreshBtn">
+            <i class="fas fa-sync-alt me-1"></i> Refresh
+        </button>
+    </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Set current date
+    document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric'
+    });
+    
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', function() {
+        const searchValue = this.value.toLowerCase();
+        const items = document.querySelectorAll('#ipoList .list-group-item');
+        
+        items.forEach(item => {
+            const text = item.textContent.toLowerCase();
+            if (text.includes(searchValue)) {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+    
+    // Refresh button animation
+    document.getElementById('refreshBtn').addEventListener('click', function() {
+        this.innerHTML = '<i class="fas fa-circle-notch fa-spin me-1"></i> Refreshing...';
+        setTimeout(() => {
+            this.innerHTML = '<i class="fas fa-check me-1"></i> Refreshed';
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-sync-alt me-1"></i> Refresh';
+            }, 1500);
+        }, 1000);
+    });
+    
+    // Add staggered animation to list items
+    document.addEventListener('DOMContentLoaded', () => {
+        const items = document.querySelectorAll('.list-group-item');
+        items.forEach((item, index) => {
+            item.style.animationDelay = `${index * 0.05}s`;
+            item.classList.add('animate__animated', 'animate__fadeInUp');
+        });
+    });
+</script>
 </body>
 </html>

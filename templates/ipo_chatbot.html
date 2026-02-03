@@ -3,26 +3,327 @@
 <head>
     <title>{{ ipo_name }} Chatbot</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --dark-bg: #121212;
+            --darker-bg: #0a0a0a;
+            --vintage-dark: #1e1e1e;
+            --vintage-border: #3a3a3a;
+            --vintage-gold: #d4af37;
+            --vintage-gold-light: #f0e6c2;
+            --vintage-text: #e0e0e0;
+            --vintage-text-light: #f5f5f5;
+            --vintage-card: #252525;
+            --vintage-chat-bg: #1a1a1a;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--vintage-text);
+            font-family: 'Georgia', serif;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.03) 0%, rgba(212, 175, 55, 0.03) 90%),
+                radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.03) 0%, rgba(212, 175, 55, 0.03) 90%);
+        }
+        
+        .container {
+            max-width: 800px;
+            padding: 2rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h2 {
+            color: var(--vintage-gold);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--vintage-border);
+            padding-bottom: 0.5rem;
+            position: relative;
+        }
+        
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100px;
+            height: 2px;
+            background: var(--vintage-gold);
+        }
+        
+        .input-group {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border-radius: 30px;
+            overflow: hidden;
+        }
+        
+        .form-control {
+            background-color: var(--vintage-card);
+            border: 1px solid var(--vintage-border);
+            color: var(--vintage-text);
+            padding: 1rem 1.5rem;
+            border-right: none;
+        }
+        
+        .form-control:focus {
+            background-color: var(--vintage-card);
+            color: var(--vintage-text-light);
+            border-color: var(--vintage-gold);
+            box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.25);
+        }
+        
+        .btn-primary {
+            background-color: var(--vintage-gold);
+            border-color: var(--vintage-gold);
+            color: var(--vintage-dark);
+            font-weight: 500;
+            padding: 0 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--vintage-gold);
+            border-color: var(--vintage-gold);
+            transform: translateX(3px);
+        }
+        
+        .alert {
+            border-radius: 8px;
+            border-left: 4px solid;
+            animation: slideIn 0.4s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .alert-info {
+            background-color: rgba(23, 162, 184, 0.1);
+            border-color: #17a2b8;
+            color: var(--vintage-text-light);
+        }
+        
+        .alert-warning {
+            background-color: rgba(212, 175, 55, 0.1);
+            border-color: var(--vintage-gold);
+            color: var(--vintage-gold-light);
+        }
+        
+        .chat-container {
+            background-color: var(--vintage-chat-bg);
+            border-radius: 12px;
+            border: 1px solid var(--vintage-border);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            min-height: 200px;
+            position: relative;
+        }
+        
+        .chat-container:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--vintage-gold), transparent);
+        }
+        
+        .chat-message {
+            padding: 0;
+            margin-bottom: 0;
+            border-radius: 0;
+            position: relative;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: messageIn 0.4s forwards;
+        }
+        
+        @keyframes messageIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .user-message {
+            background-color: transparent;
+            border: none;
+            margin: 0;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--vintage-border);
+        }
+        
+        .bot-message {
+            background-color: transparent;
+            border: none;
+            margin: 0;
+            padding: 0.5rem 0;
+            margin-bottom: 1rem;
+        }
+        
+        .message-time {
+            font-size: 0.75rem;
+            color: var(--vintage-gold-light);
+            opacity: 0.7;
+            margin-top: 0.25rem;
+            text-align: right;
+        }
+        
+
+        
+        .btn-secondary {
+            background-color: var(--vintage-border);
+            border-color: var(--vintage-border);
+            color: var(--vintage-text-light);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--vintage-card);
+            border-color: var(--vintage-gold);
+        }
+        
+        .btn-info {
+            background-color: rgba(23, 162, 184, 0.8);
+            border-color: rgba(23, 162, 184, 0.8);
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background-color: transparent;
+            color: #17a2b8;
+            border-color: #17a2b8;
+        }
+        
+        .typing-indicator {
+            display: flex;
+            padding: 1rem;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--vintage-gold-light);
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--vintage-gold-light);
+            border-radius: 50%;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typingAnimation {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+        
+        /* Vintage decorative elements */
+        .vintage-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--vintage-gold), transparent);
+            margin: 2rem 0;
+            opacity: 0.5;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .user-message, .bot-message {
+                margin-left: 0;
+                margin-right: 0;
+            }
+        }
+    </style>
 </head>
-<body class="bg-light">
+<body>
 <div class="container mt-4">
-    <h2 class="mb-4">Chatbot – Ask about {{ ipo_name }} IPO</h2>
-
+    <h2 class="mb-4"><i class="fas fa-robot me-2"></i>Ask about {{ ipo_name }} IPO</h2>
+    
     <form method="POST" class="input-group mb-4">
-        <input type="text" name="query" class="form-control" placeholder="E.g. What is the issue price?" required>
-        <button class="btn btn-primary" type="submit">Ask</button>
+        <input type="text" name="query" id="queryInput" class="form-control" placeholder="E.g. What is the issue price?" required>
+        <button class="btn btn-primary" type="submit" id="submitBtn">
+            <i class="fas fa-paper-plane me-1"></i> Ask
+        </button>
     </form>
-
-    {% if chatbot_answer %}
-    <div class="alert {{ 'alert-info' if 'Sorry' not in chatbot_answer else 'alert-warning' }}">
-        <strong>Answer:</strong> {{ chatbot_answer }}
+    
+    <div class="chat-container" data-has-answer="{{ 'true' if chatbot_answer else 'false' }}">
+        {% if chatbot_answer %}
+        <div class="user-message" style="animation-delay: 0.1s">
+            {{ request.form.get('query', '') }}
+            <div class="message-time">{{ now.strftime('%I:%M %p') }}</div>
+        </div>
+        <div class="bot-message" style="animation-delay: 0.3s">
+            {{ chatbot_answer }}
+            <div class="message-time">{{ now.strftime('%I:%M %p') }}</div>
+        </div>
+        {% else %}
+        <div class="text-center text-muted py-4">
+            <i class="fas fa-comments fa-2x mb-3"></i>
+            <p>Ask me anything about {{ ipo_name }} IPO</p>
+        </div>
+        {% endif %}
+        
+        {% if not chatbot_answer and request.method == 'POST' %}
+        <div class="typing-indicator">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <span>Analyzing data...</span>
+        </div>
+        {% endif %}
     </div>
-    {% endif %}
 
-    <div class="mt-4">
-        <a href="{{ url_for('ipo_detail', ipo_name=ipo_name|urlencode) }}" class="btn btn-secondary me-2">← Back to Overview</a>
-        <a href="{{ url_for('ipo_articles', ipo_name=ipo_name|urlencode) }}" class="btn btn-info">📄 View Articles</a>
+    <div class="vintage-divider"></div>
+
+    <div class="d-flex flex-wrap gap-3">
+        <a href="{{ url_for('ipo_detail', ipo_name=ipo_name|urlencode) }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i> Back to Overview
+        </a>
+        <a href="{{ url_for('ipo_articles', ipo_name=ipo_name|urlencode) }}" class="btn btn-info">
+            <i class="fas fa-newspaper me-2"></i> View Articles
+        </a>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+    
+    // Show loading state on form submit
+    document.querySelector('form').addEventListener('submit', function() {
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin me-1"></i> Asking...';
+        submitBtn.disabled = true;
+        
+        // Scroll to bottom of chat container
+        setTimeout(() => {
+            document.querySelector('.chat-container').scrollTop = document.querySelector('.chat-container').scrollHeight;
+        }, 100);
+    });
+    
+    // Auto-focus input on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('queryInput').focus();
+        
+        // Smooth scroll for new messages if there's a chatbot answer
+        var chatContainer = document.querySelector('.chat-container');
+        if (chatContainer.getAttribute('data-has-answer') === 'true') {
+            setTimeout(function() {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 300);
+        }
+    });
+</script>
 </body>
 </html>

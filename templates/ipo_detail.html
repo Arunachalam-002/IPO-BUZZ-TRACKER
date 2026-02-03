@@ -3,17 +3,205 @@
 <head>
     <title>{{ ipo_name }} IPO Details</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --dark-bg: #121212;
+            --darker-bg: #0a0a0a;
+            --vintage-dark: #1e1e1e;
+            --vintage-border: #3a3a3a;
+            --vintage-gold: #d4af37;
+            --vintage-gold-light: #f0e6c2;
+            --vintage-text: #e0e0e0;
+            --vintage-text-light: #f5f5f5;
+            --vintage-card: #252525;
+            --vintage-table: #2a2a2a;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--vintage-text);
+            font-family: 'Georgia', serif;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.03) 0%, rgba(212, 175, 55, 0.03) 90%),
+                radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.03) 0%, rgba(212, 175, 55, 0.03) 90%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            padding: 2rem;
+        }
+        
+        h2 {
+            color: var(--vintage-gold);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--vintage-border);
+            padding-bottom: 0.5rem;
+            position: relative;
+        }
+        
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100px;
+            height: 2px;
+            background: var(--vintage-gold);
+        }
+        
+        .card {
+            background-color: var(--vintage-card);
+            border: 1px solid var(--vintage-border);
+            border-radius: 4px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--vintage-gold), transparent);
+        }
+        
+        .card-title {
+            color: var(--vintage-gold-light);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .card-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 1px;
+            background: var(--vintage-gold);
+        }
+        
+        .table {
+            color: var(--vintage-text);
+            margin-bottom: 0;
+        }
+        
+        .table-bordered {
+            border-color: var(--vintage-border);
+        }
+        
+        .table th {
+            background-color: var(--vintage-table);
+            color: var(--vintage-gold-light);
+            border-color: var(--vintage-border);
+            font-weight: 500;
+            width: 40%;
+        }
+        
+        .table td {
+            background-color: var(--vintage-card);
+            border-color: var(--vintage-border);
+            color: var(--vintage-gold-light);
+        }
+        
+        .img-fluid {
+            border: 1px solid var(--vintage-border) !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+            transition: transform 0.3s ease;
+        }
+        
+        .img-fluid:hover {
+            transform: scale(1.02);
+        }
+        
+        .text-muted {
+            color: var(--vintage-gold-light) !important;
+            opacity: 0.7;
+        }
+        
+        .btn-info {
+            background-color: rgba(23, 162, 184, 0.8);
+            border-color: rgba(23, 162, 184, 0.8);
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background-color: transparent;
+            color: #17a2b8;
+            border-color: #17a2b8;
+        }
+        
+        .btn-success {
+            background-color: var(--vintage-gold);
+            border-color: var(--vintage-gold);
+            color: var(--vintage-dark);
+            font-weight: 500;
+        }
+        
+        .btn-success:hover {
+            background-color: transparent;
+            color: var(--vintage-gold);
+            border-color: var(--vintage-gold);
+        }
+        
+        .btn-secondary {
+            background-color: var(--vintage-border);
+            border-color: var(--vintage-border);
+            color: var(--vintage-text-light);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--vintage-card);
+            border-color: var(--vintage-gold);
+        }
+        
+        .shadow-sm {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
+        }
+        
+        /* Vintage decorative elements */
+        .vintage-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--vintage-gold), transparent);
+            margin: 2rem 0;
+            opacity: 0.5;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .row > .col-md-6 {
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
 </head>
-<body class="bg-light">
+<body>
 <div class="container mt-4">
     <h2 class="mb-4">{{ ipo_name }} IPO Overview</h2>
+    
+    <div class="vintage-divider"></div>
 
     <div class="row">
         <div class="col-md-6">
             {% if ipo_details %}
             <div class="card shadow-sm mb-4">
                 <div class="card-body">
-                    <h5 class="card-title">IPO Details</h5>
+                    <h5 class="card-title"><i class="fas fa-info-circle me-2"></i>IPO Details</h5>
                     <table class="table table-bordered">
                         {% for key, value in ipo_details.items() %}
                         <tr>
@@ -26,17 +214,31 @@
             </div>
             {% endif %}
 
-            <a href="{{ url_for('ipo_articles', ipo_name=ipo_name|urlencode) }}" class="btn btn-info me-2">📄 View Articles</a>
-            <a href="{{ url_for('ipo_chatbot', ipo_name=ipo_name|urlencode) }}" class="btn btn-success">💬 Ask Chatbot</a>
+            <div class="d-flex flex-wrap gap-3 mt-3">
+                <a href="{{ url_for('ipo_articles', ipo_name=ipo_name|urlencode) }}" class="btn btn-info">
+                    <i class="fas fa-newspaper me-2"></i>View Articles
+                </a>
+                <a href="{{ url_for('ipo_chatbot', ipo_name=ipo_name|urlencode) }}" class="btn btn-success">
+                    <i class="fas fa-comment me-2"></i>Ask Chatbot
+                </a>
+            </div>
         </div>
 
         <div class="col-md-6 text-center">
-            <img src="{{ url_for('static', filename='wordclouds/' + wordcloud_filename) }}" class="img-fluid shadow border rounded" alt="Wordcloud">
-            <p class="text-muted mt-2">Top keywords from IPO articles</p>
+            <img src="{{ url_for('static', filename='wordclouds/' + wordcloud_filename) }}" 
+                 class="img-fluid shadow border rounded" 
+                 alt="Wordcloud">
+            <p class="text-muted mt-2"><i class="fas fa-tags me-2"></i>Top keywords from IPO articles</p>
         </div>
     </div>
 
-    <a href="{{ url_for('index') }}" class="btn btn-secondary mt-4">← Back to Archive</a>
+    <div class="vintage-divider"></div>
+
+    <a href="{{ url_for('index') }}" class="btn btn-secondary mt-2">
+        <i class="fas fa-arrow-left me-2"></i>Back to Archive
+    </a>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

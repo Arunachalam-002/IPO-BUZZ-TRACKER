@@ -3,10 +3,179 @@
 <head>
     <title>{{ ipo_name }} Articles</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --dark-bg: #121212;
+            --darker-bg: #0a0a0a;
+            --vintage-dark: #1e1e1e;
+            --vintage-border: #3a3a3a;
+            --vintage-gold: #d4af37;
+            --vintage-gold-light: #f0e6c2;
+            --vintage-text: #e0e0e0;
+            --vintage-text-light: #f5f5f5;
+            --vintage-card: #252525;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--vintage-text);
+            font-family: 'Georgia', serif;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.03) 0%, rgba(212, 175, 55, 0.03) 90%),
+                radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.03) 0%, rgba(212, 175, 55, 0.03) 90%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            padding: 2rem;
+        }
+        
+        h2 {
+            color: var(--vintage-gold);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--vintage-border);
+            padding-bottom: 0.5rem;
+            position: relative;
+        }
+        
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100px;
+            height: 2px;
+            background: var(--vintage-gold);
+        }
+        
+        .card {
+            background-color: var(--vintage-card);
+            border: 1px solid var(--vintage-border);
+            border-radius: 4px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--vintage-gold), transparent);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border-color: var(--vintage-gold);
+        }
+        
+        .card-title {
+            color: var(--vintage-gold-light);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .card-text {
+            color: var(--vintage-text);
+            line-height: 1.6;
+        }
+        
+        .badge {
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            padding: 0.35em 0.65em;
+        }
+        
+        .bg-success {
+            background-color: #28a745 !important;
+        }
+        
+        .bg-danger {
+            background-color: #dc3545 !important;
+        }
+        
+        .btn-outline-primary {
+            color: var(--vintage-gold);
+            border-color: var(--vintage-gold);
+            background-color: transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--vintage-gold);
+            color: var(--vintage-dark);
+            border-color: var(--vintage-gold);
+        }
+        
+        .btn-secondary {
+            background-color: var(--vintage-border);
+            border-color: var(--vintage-border);
+            color: var(--vintage-text-light);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--vintage-card);
+            border-color: var(--vintage-gold);
+        }
+        
+        .btn-success {
+            background-color: var(--vintage-gold);
+            border-color: var(--vintage-gold);
+            color: var(--vintage-dark);
+            font-weight: 500;
+        }
+        
+        .btn-success:hover {
+            background-color: transparent;
+            color: var(--vintage-gold);
+            border-color: var(--vintage-gold);
+        }
+        
+        .alert-warning {
+            background-color: rgba(212, 175, 55, 0.1);
+            border-color: var(--vintage-gold);
+            color: var(--vintage-gold-light);
+        }
+        
+        .shadow-sm {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
+        }
+        
+        /* Vintage decorative elements */
+        .vintage-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--vintage-gold), transparent);
+            margin: 2rem 0;
+            opacity: 0.5;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
 </head>
-<body class="bg-light">
+<body>
 <div class="container mt-4">
     <h2 class="mb-4">{{ ipo_name }} – Related News Articles</h2>
+    
+    <div class="vintage-divider"></div>
 
     {% if articles %}
     <div class="row row-cols-1 row-cols-md-2 g-4">
@@ -14,30 +183,43 @@
         <div class="col">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h6 class="card-title text-primary">Sentiment:
+                    <h6 class="card-title text-primary">
+                        <i class="fas fa-newspaper"></i> Sentiment:
                         {% if article['Sentiment'] == 'positive' %}
-                            <span class="badge bg-success">Positive</span>
+                            <span class="badge bg-success"><i class="fas fa-smile"></i> Positive</span>
                         {% elif article['Sentiment'] == 'neutral' %}
-                            <span class="badge bg-secondary">Neutral</span>
+                            <span class="badge bg-secondary"><i class="fas fa-meh"></i> Neutral</span>
                         {% else %}
-                            <span class="badge bg-danger">Negative</span>
+                            <span class="badge bg-danger"><i class="fas fa-frown"></i> Negative</span>
                         {% endif %}
                     </h6>
                     <p class="card-text">{{ article['Summary'] }}</p>
-                    <a href="{{ article['URL'] }}" class="btn btn-sm btn-outline-primary" target="_blank">🔗 Read Full Article</a>
+                    <a href="{{ article['URL'] }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> Read Full Article
+                    </a>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
     {% else %}
-    <div class="alert alert-warning">No articles found for this IPO.</div>
+    <div class="alert alert-warning">
+        <i class="fas fa-exclamation-circle me-2"></i> No articles found for this IPO.
+    </div>
     {% endif %}
 
-    <div class="mt-4">
-        <a href="{{ url_for('ipo_detail', ipo_name=ipo_name|urlencode) }}" class="btn btn-secondary me-2">← Back to Overview</a>
-        <a href="{{ url_for('ipo_chatbot', ipo_name=ipo_name|urlencode) }}" class="btn btn-success">💬 Ask Chatbot</a>
+    <div class="vintage-divider"></div>
+
+    <div class="mt-4 d-flex flex-wrap gap-3">
+        <a href="{{ url_for('ipo_detail', ipo_name=ipo_name|urlencode) }}" class="btn btn-secondary me-2">
+            <i class="fas fa-arrow-left me-2"></i> Back to Overview
+        </a>
+        <a href="{{ url_for('ipo_chatbot', ipo_name=ipo_name|urlencode) }}" class="btn btn-success">
+            <i class="fas fa-comment me-2"></i> Ask Chatbot
+        </a>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
