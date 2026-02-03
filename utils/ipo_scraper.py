@@ -9,6 +9,7 @@ ensure_datasets(BASE_DIR)
 IPO_CSV_PATH = os.path.join(BASE_DIR, "data", "IPO.csv")
 NEWS_CSV_PATH = os.path.join(BASE_DIR, "data", "training_data_26000.csv")
 
+
 # ------------------ CORE LOGIC ------------------
 def get_ipo_data():
     # ---- Load IPO data ----
@@ -25,10 +26,17 @@ def get_ipo_data():
     news_df = pd.read_csv(NEWS_CSV_PATH)
     news_df.columns = [col.strip() for col in news_df.columns]
 
-    if "Content" not in news_df.columns:
-        raise ValueError("Expected 'Content' column missing in training_data_26000.csv")
+    # ---- Validate required columns ----
+    required_cols = {"Content", "URL", "Summary", "Sentiment"}
+    if not required_cols.issubset(set(news_df.columns)):
+        raise ValueError(
+            f"Expected columns {required_cols}, but found {news_df.columns.tolist()}"
+        )
 
-    news_df = news_df[news_df["Content"].str.contains("IPO", case=False, na=False)]
+    # ---- Filter IPO-related news ----
+    news_df = news_df[
+        news_df["Content"].str.contains("IPO", case=False, na=False)
+    ]
 
     articles = []
     ipo_details_dict = {}
@@ -56,6 +64,7 @@ def get_ipo_data():
             "Current Gain (%)": row.get("Current_gains", "N/A")
         }
 
+        # ---- Match articles for this IPO ----
         matching_articles = news_df[
             news_df["Content"].str.lower().str.contains(ipo_name_lower, na=False)
         ]
@@ -63,18 +72,22 @@ def get_ipo_data():
         for _, art in matching_articles.iterrows():
             articles.append({
                 "IPO": ipo_name,
-                "URL": art.get("URL", ""),
-                "Content": art.get("Content", ""),
-                "Summary": art.get("Summary", ""),
-                "Sentiment": str(art.get("Sentiment", "neutral")).lower()
+                "URL": art["URL"],
+                "Content": art["Content"],
+                "Summary": art["Summary"],
+                "Sentiment": str(art["Sentiment"]).lower()
             })
 
     return articles, ipo_details_dict
 
 
+# ------------------ HELPERS ------------------
 def extract_ipo_names(articles):
-    return sorted(set(a["IPO"] for a in articles if "IPO" in a))
+    return sorted({a["IPO"] for a in articles if "IPO" in a})
 
 
 def filter_articles_by_ipo(articles, ipo_name):
-    return [a for a in articles if a.get("IPO", "").lower() == ipo_name.lower()]
+    return [
+        a for a in articles
+        if a.get("IPO", "").lower() == ipo_name.lower()
+    ]
